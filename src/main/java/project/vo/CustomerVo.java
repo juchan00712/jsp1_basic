@@ -1,6 +1,6 @@
 package project.vo;
 
-import java.sql.Date;
+import java.util.Date;
 //Value Object : 데이터 형식으로서 정의되는 클래스 
 //          ㄴ private 필드, 값 초기화 커스텀생성자 , getter , hashcode와 equals 재정의
 //          ㄴ 객체 생성시 값을 초기화 한 후 변경할 수 없으며, 필드값이 같으면 같은 값으로 처리되는 객체
