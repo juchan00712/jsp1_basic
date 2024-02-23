@@ -1,6 +1,7 @@
 package servlet.day3;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,9 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import project.dao.TblCustomerDao;
 import project.dao.TblProductDao;
-import project.vo.CustomerVo;
 import project.vo.ProductVo;
 
 
@@ -43,20 +42,28 @@ public class productReg extends HttpServlet {
 		String ctg = req.getParameter("ctg");
 		String pname = req.getParameter("pname");
 		String temp = req.getParameter("price");
-		// 나이가 필수 입력이 아니라면 값이 비어 있습니다. => 오류
+		
 		int price = 0;
-		// form 태그 요소의 name="age"가 있으므로 temp가 null일 경우는 없습니다.
+		
 		if(temp.length() != 0) price = Integer.parseInt(temp);
 		
-		// dao의 메소드 인자로 전달할 vo 객체 생성하기
+		
 		ProductVo vo = new ProductVo(pcode, ctg, pname, price);
 		Logger.info("\t 입력값 vo : {}", vo);
 		TblProductDao dao = new TblProductDao();
-		dao.productReg(vo);	// PK 아이디 중복값있으면 무결성 오류
+		int result = dao.insert(vo);
 		
-		// 서버가 클라이언트에게 "customers.cc로 요청을 보내라." 응답을 보냅니다.
-		resp.sendRedirect("Products.cc");
-		// 리다이렉트는 웹페이지의 자바스크립트, out.print 출력을 못합니다.
+		String message = "상품 등록이 완료되었습니다.";
+		if (result == 0)
+			message = "상품 등록 오류가 생겼습니다.";
+		
+		resp.setContentType("text/html; charset= UTF-8");
+		PrintWriter out = resp.getWriter();
+		out.print("<script>");
+		out.print("alert('"+message+"');");
+		out.print("location.href='Products.cc';");
+		out.print("</script>");
+		
 		
 	}
 }

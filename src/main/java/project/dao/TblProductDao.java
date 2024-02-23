@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import project.vo.BuyVo;
 import project.vo.ProductVo;
 
 public class TblProductDao {
@@ -30,22 +29,23 @@ public class TblProductDao {
      	 return conn;
     }
     
-    public void productReg(ProductVo vo) {
+    public int insert(ProductVo vo) {
     	String sql = "INSERT INTO TBL_PRODUCT(PCODE, CATEGORY, PNAME, PRICE) " +
     				 "VALUES (?, ?, ?, ?)";
+    	int result = 0;
     	try (Connection connection = getConnection();       //auto close
              PreparedStatement pstmt = connection.prepareStatement(sql);){   
-                 //할일2 : 매개변수 바인딩 (매개변수 타입에 맞는 메소드를 실행합시다.)
+                 
                  pstmt.setString(1, vo.getPcode());
                  pstmt.setString(2, vo.getCategory());
                  pstmt.setString(3, vo.getPname());
                  pstmt.setInt(4, vo.getPrice());
 
-                 pstmt.executeUpdate();
+                 result = pstmt.executeUpdate();
         } catch (SQLException e) {
              System.out.println("productReg 실행 예외 발생 : " + e.getMessage());
         }
-
+    	return result;
     }
     
     // 전체 조회
