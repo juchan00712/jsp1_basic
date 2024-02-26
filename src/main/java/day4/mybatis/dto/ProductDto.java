@@ -15,4 +15,13 @@ public class ProductDto {
 		private String category;
 		private String pname;
 		private int price;
+		
+		
+		
+		@Override
+		public String toString() {
+			return "\nProductDto = " + pcode + ", " + category + ", " + pname + ", " + price;
+		}
+	
+	
 }

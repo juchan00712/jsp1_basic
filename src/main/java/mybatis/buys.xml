@@ -34,7 +34,7 @@
   	</delete>
   	
   	<!-- selectCustomerBuyList -->
-  	<select id="selectCustomerBuyList" resultType="BuyDto">
+  	<select id="selectCustomerBuyList" resultType="CustomerBuyDto">
   		SELECT BUY_IDX ,tb.PCODE , PNAME, PRICE, QUANTITY ,BUY_DATE
   		FROM TBL_BUY tb
   		JOIN TBL_PRODUCT tp

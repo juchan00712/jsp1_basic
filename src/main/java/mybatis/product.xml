@@ -10,9 +10,9 @@
   	</select>
   	
   	<!-- insert, update, delete는 리턴타입 지정안합니다.(그래도 값은 리턴해 줍니다.) -->
-  	<insert id="insert" parameterType="ProductDto">
-  		INSERT INTO TBL_PRODUCT
-  			VALUES(#{PCODE},#{CATEGORY},#{PNAME},#{PRICE})
+  	<insert id="Insert" parameterType="ProductDto">
+  		INSERT INTO TBL_PRODUCT (PCODE, CATEGORY, PNAME, PRICE)
+  			VALUES(#{pcode},#{category},#{pname},#{price})
   	</insert>
   	
   	<!-- getPriceTable -->
@@ -21,17 +21,82 @@
   	</select>
   	
   	<!-- selectByPname -->
-  	<select id="selectByPname" resultType="ProductDto">
+  	<select id="selectByPname" parameterType="String" resultType="ProductDto">
   		SELECT * FROM TBL_PRODUCT
   		WHERE PNAME LIKE '%' || #{pname} || '%'
   		ORDER BY CATEGORY
   	</select>
   	
   	<!-- selectByCategory -->
-  	<select id="selectByCategory" resultType="ProductDto">
+  	<select id="selectByCategory" parameterType="String" resultType="ProductDto">
   		SELECT * FROM TBL_PRODUCT
   		WHERE CATEGORY = #{category}
   		ORDER BY PNAME
   	</select>
   	
+  	<!-- 동적쿼리 예시 : 상품 조회에 필요한 검색필터. 아래 4개 중 하나의 쿼리로 실행되게 할 수 있습니다.
+  					  동적쿼리를 위해서 where, if, trim 마이바티스 태그 사용합니다. -->
+  	<!-- 예시 : SELECT * FROM TBL_PRODUCT
+  	 		   WHERE CATEGORY = 'B2' AND PNAME LIKE '%' || '사과' || '%' => 파라미터 값이 2개 모두 있을 때
+  	 		   			또는
+  	 		   SELECT * FROM TBL_PRODUCT
+  	 		   WHERE CATEGORY = 'B2' => keyword 파라미터가 없을 때
+  	 		   			또는
+  	 		   SELECT * FROM TBL_PRODUCT
+  	 		   WHERE PNAME LIKE '%' || '사과' || '%' => category 파라미터가 없을 때
+  	 		   			또는
+  	 		   SELECT * FROM TBL_PRODUCT => 파라미터 2개 모두 없을 때 -->
+  			   
+  	
+  	<select id="search" resultType="ProductDto" parameterType="java.util.Map">
+  		select * from tbl_product
+  	<!-- 아래 if의 test 값은 조건식 입니다. keyword 파라미터값이 null이 아닐때. -->
+  		<where>
+  			<if test="category!=null">
+  			<!-- category 파라미터값이 null이 아닐때. -->
+  					category = #{category}  
+  			</if>
+  			<if test="keyword!=null">
+  				<!-- 앞의 조건식 없으면 and 는 trim -->
+  				<trim prefix='and'>	<!-- 이 위치에 and 문자열을 출력. -->
+  				pname like '%' || #{keyword} || '%'
+  				</trim>
+  			</if>
+  			<!-- test 논리연산 : and, or -->
+  			<if test="from!=null and to!=null">
+  				<trim prefix='and'>
+  				price between #{from} and #{to}
+  				</trim>
+  			</if>
+  		</where>
+  			<if test="column!=null">
+  				ORDER BY ${column}
+  			</if>
+  	</select>
+  	<select id="getCategories" resultType="day4.mybatis.dto.CateDto">
+  		<!-- SELECT DISTINCT CATEGORY FROM TBL_PRODUCT ORDER BY CATEGORY -->
+  		SELECT * FROM TBL_CATEGORY ORDER BY CODE
+  	</select>
   </mapper>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

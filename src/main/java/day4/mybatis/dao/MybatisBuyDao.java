@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import day4.mybatis.dto.BuyDto;
+import day4.mybatis.dto.CustomerBuyDto;
 import mybatis.SqlSessionBean;
 
 
@@ -56,9 +57,9 @@ public class MybatisBuyDao {
 		return result;
 	}
 	
-	public List<BuyDto> selectCustomerBuyList(String customid) {
+	public List<CustomerBuyDto> selectCustomerBuyList(String customid) {
 	    SqlSession sqlSession = sessionFactory.openSession();
-	    List<BuyDto> list = sqlSession.selectOne("selectCustomerBuyList", customid);
+	    List<CustomerBuyDto> list = sqlSession.selectList("tblbuy.selectCustomerBuyList", customid);
 	    sqlSession.close();
 	    return list;
 	}

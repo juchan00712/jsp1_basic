@@ -32,14 +32,10 @@
   	<!-- 회원정보 ※PK※ 조회 - 조회 결과 행 개수는? : select * from tbl_custom where custom_id = ?
     //                          ㄴ 0 개 : 조회 결과 없다. 조회 결과가 있다면 only 1개.!!
     //                          ㄴ 리턴 타입 CustomerVo -->
-  	<select id="getCustomer" resultType="CustomerDto">
+  	<select id="getCustomer" parameterType="String" resultType="CustomerDto">
   		SELECT * FROM TBL_CUSTOM 
   		WHERE CUSTOM_ID = #{customId}
   	</select>
   	
-  	<select id="selectByNameAge" resultType="CustomerDto">
-  		SELECT * FROM TBL_CUSTOM WHERE NAME = #{name}
-  		AND AGE = #{age}
-  	</select>
   	
   </mapper>
